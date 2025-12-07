@@ -1,18 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo ">>> Creating model directories"
-mkdir -p /workspace/ComfyUI/models/checkpoints
-mkdir -p /workspace/ComfyUI/models/vae
-mkdir -p /workspace/ComfyUI/models/loras
-mkdir -p /workspace/ComfyUI/models/upscale
+echo ">>> [init.sh] Начало инициализации."
 
-echo ">>> Downloading models"
+COMFY="/workspace/ComfyUI"
 
-curl -L -o /workspace/ComfyUI/models/vae/wan_2.1_vae.safetensors \
+echo ">>> [init.sh] Создаю каталоги моделей..."
+mkdir -p "$COMFY/models/checkpoints"
+mkdir -p "$COMFY/models/vae"
+mkdir -p "$COMFY/models/loras"
+mkdir -p "$COMFY/models/upscale"
+
+echo ">>> [init.sh] Скачиваю модели..."
+
+# WAN VAE
+wget -O "$COMFY/models/vae/wan_2.1_vae.safetensors" \
   "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
 
-curl -L -o /workspace/ComfyUI/models/checkpoints/Insatgirlv2.3_low.safetensors \
+# Instagirl
+wget -O "$COMFY/models/checkpoints/Instagirlv2.3_low.safetensors" \
   "https://huggingface.co/allyourtech/instagirl/resolve/main/Insatgirlv2.3_low.safetensors"
 
-echo ">>> DONE init.sh"
+# Другие модели добавишь сам, формат один
+
+echo ">>> [init.sh] Копирую workflow.json..."
+cp /workspace/repo/workflow.json "/workspace/ComfyUI/user/default/workflows/workflow.json"
+
+echo ">>> [init.sh] Инициализация завершена успешно!"
