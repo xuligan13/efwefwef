@@ -1,24 +1,20 @@
-FROM runpod/comfy-ui
+FROM ghcr.io/comfyanonymous/comfyui:latest
 
-# Устанавливаем необходимые утилиты
+# устанавливаем утилиты
 RUN apt-get update && apt-get install -y git curl && apt-get clean
 
-# Создаём директории, если их нет
-RUN mkdir -p /workspace/repo && \
-    mkdir -p /workspace/models && \
-    mkdir -p /workspace/workflow
+# создаем каталоги
+RUN mkdir -p /workspace/repo \
+    && mkdir -p /workspace/models \
+    && mkdir -p /workspace/workflow
 
-# Копируем init.sh и workflow.json из твоего репозитория в контейнер
+# копируем файлы
 COPY init.sh /workspace/repo/init.sh
-COPY workflow/workflow.json /workspace/workflow/workflow.json
+COPY workflow.json /workspace/workflow/workflow.json
 
-# Делаем init.sh исполнимым
 RUN chmod +x /workspace/repo/init.sh
 
-# Указываем рабочую директорию
 WORKDIR /workspace
 
-# Команда запуска:
-# 1. Выполняет init.sh (скачивает модели с HuggingFace)
-# 2. Запускает ComfyUI сервер RunPod
-CMD ["/bin/bash", "-c", "/workspace/repo/init.sh && /start.sh"]
+# запускаем init + comfyui
+CMD ["/bin/bash", "-c", "/workspace/repo/init.sh && python3 /usr/local/comfyui/main.py --listen 0.0.0.0 --port 8188"]
