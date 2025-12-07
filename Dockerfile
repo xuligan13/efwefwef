@@ -1,4 +1,4 @@
-FROM runpod/comfy-ui:latest
+FROM runpod/comfy-ui
 
 # Устанавливаем необходимые утилиты
 RUN apt-get update && apt-get install -y git curl && apt-get clean
