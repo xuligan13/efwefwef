@@ -22,7 +22,7 @@ RUN mkdir -p /workspace/ComfyUI/user/default/workflows
 COPY . /workspace/repo/
 
 # -----------------------------
-# 4. Fix line endings (CRLF → LF) for init.sh
+# 4. Fix Windows line endings (CRLF → LF)
 # -----------------------------
 RUN sed -i 's/\r$//' /workspace/repo/init.sh
 
