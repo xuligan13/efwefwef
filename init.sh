@@ -1,22 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "[init] Starting setup..."
+echo ">>> Creating model directories"
+mkdir -p /workspace/ComfyUI/models/checkpoints
+mkdir -p /workspace/ComfyUI/models/vae
+mkdir -p /workspace/ComfyUI/models/loras
+mkdir -p /workspace/ComfyUI/models/upscale
 
-COMFY_DIR="/workspace/ComfyUI"
-MODEL_DIR="$COMFY_DIR/models"
-WORKFLOW_DIR="$COMFY_DIR/user/default/workflows"
+echo ">>> Downloading models"
 
-echo "[init] Creating directories..."
-mkdir -p "$MODEL_DIR" "$WORKFLOW_DIR"
+curl -L -o /workspace/ComfyUI/models/vae/wan_2.1_vae.safetensors \
+  "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors"
 
-echo "[init] Downloading models..."
+curl -L -o /workspace/ComfyUI/models/checkpoints/Insatgirlv2.3_low.safetensors \
+  "https://huggingface.co/allyourtech/instagirl/resolve/main/Insatgirlv2.3_low.safetensors"
 
-wget -O "$MODEL_DIR/model1.safetensors" "https://..."
-wget -O "$MODEL_DIR/model2.safetensors" "https://..."
-# остальные модели
-
-echo "[init] Copying workflow..."
-cp /workspace/repo/workflow.json "$WORKFLOW_DIR/workflow.json"
-
-echo "[init] Finished."
+echo ">>> DONE init.sh"
