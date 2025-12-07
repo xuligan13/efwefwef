@@ -1,35 +1,22 @@
-# RunPod ComfyUI Custom Endpoint Template
+# RunPod ComfyUI Endpoint
 
-Этот репозиторий — шаблон для запуска ComfyUI как RunPod Custom Endpoint.
-Он автоматически скачивает модели, кладёт их в правильные папки и запускает ComfyUI в headless/api режиме.
+This repository contains everything required to deploy a fully automated ComfyUI endpoint on RunPod Serverless.
 
-## Содержимое
-- `Dockerfile` — собирает образ, устанавливает зависимости и запускает `handler.py`.
-- `handler.py` — стартовый скрипт: скачивает модели, запускает ComfyUI и поднимает Flask API.
-- `download_models.py` — скачивает модели, перечисленные в `workflow.json`, и дополнительные URL из маппинга.
-- `workflow.json` — (опционально) твой workflow — мы положили сюда копию для удобства.
+## Files included
 
-## Быстрый старт (локально)
-1. Скопируй `workflow.json` в `./workflow.json` или используй монтирование.
-2. Построй Docker-образ:
-```bash
-docker build --build-arg TORCH_CUDA=cu118 -t comfy-runpod:latest .
-```
-3. Запусти контейнер (добавь GPU-флаги при необходимости):
-```bash
-docker run --rm -p 8188:8188 -v /full/path/to/workflow.json:/mnt/data/workflow.json comfy-runpod:latest
-```
-4. Проверь `/health` и `POST /run` на порту 8188.
+- Dockerfile — builds a fully working ComfyUI environment
+- init.sh — downloads models & installs workflow
+- workflow.json — your custom workflow
 
-## RunPod
-1. Создай новый Custom Endpoint на RunPod.
-2. Выбери "Import from GitHub" и укажи этот репозиторий.
-3. При необходимости добавь переменные окружения:
-   - `HF_TOKEN` — токен HuggingFace для приватных репозиториев.
-   - `TORCH_CUDA` — cu118, cu121 или `cpu`.
+## Important
 
-## Примечания и доработки
-- Команда запуска ComfyUI (`COMFY_CMD`) может отличаться в форках — проверь `handler.py`.
-- `download_models.py` использует URL маппинг; если имена в `workflow.json` и URL не совпадают, добавь соответствующие записи.
-- Для приватных HF-репозиториев добавь использование `HF_TOKEN` в `download_models.py` (Authorization header).
+init.sh must use LF line endings.
+Dockerfile automatically cleans CRLF via sed.
 
+## Deployment steps
+
+1. Push this repository to GitHub
+2. Create new RunPod Serverless endpoint (GitHub → Dockerfile)
+3. Wait until Build succeeds
+4. Deploy
+5. Call ComfyUI via RunPod API v2
