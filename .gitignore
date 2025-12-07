@@ -1,9 +1,0 @@
-.venv
-__pycache__/
-*.pyc
-*.pkl
-*.pt
-*.pth
-*.safetensors
-*.gguf
-workspace/models/
